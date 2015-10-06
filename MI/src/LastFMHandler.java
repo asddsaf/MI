@@ -121,8 +121,8 @@ public class LastFMHandler {
 					t_tag.setAttributeNode(t_tagCount);
 
 					Attr t_tagName = doc.createAttribute("name");
-					t_tagName.setValue(node.getChildNodes().item(1)
-							.getTextContent());
+					t_tagName.setValue(node.getChildNodes().item(2)
+							.getTextContent().toString());
 					t_tag.setAttributeNode(t_tagName);
 
 					t_artist.appendChild(t_tag);
