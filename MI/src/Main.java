@@ -15,12 +15,12 @@ public class Main {
 
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter("data.xml"));
+			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+			bw.write("<root>");
 			//Get top artists of nikolettk
 			URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=nikolettk&limit=10&api_key="+APIKEY);
 			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strTemp = "";
-			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			bw.write("<root>");
 			while (null != (strTemp = br.readLine())) {
 				int startIndex = strTemp.indexOf("<name>");
 				if ( startIndex != -1) {
