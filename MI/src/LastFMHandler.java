@@ -129,7 +129,6 @@ public class LastFMHandler {
 					
 				}
 
-				doc.normalizeDocument();;
 				
 				TransformerFactory transformerFactory = TransformerFactory
 						.newInstance();
