@@ -2,16 +2,13 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,12 +20,12 @@ public class LastFMHandler {
 	private ArrayList<String> artists;
 	public static final String APIKEY = "7d7d86e0683f91595c5d6784f12da0c5";
 	public static final String NAME = "nikolettk";
+	public static final int MAXTAGS = 10;
+	public static final int MAXCOUNT = 10;
 
-	private Document doc;
 
 	public LastFMHandler() {
 		artists = new ArrayList<String>();
-		initDoc();
 	}
 
 	public void fetchArtistsByUser() {
@@ -45,6 +42,7 @@ public class LastFMHandler {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			final Document document = db.parse(connection.getInputStream());
 			// ***
+			
 			NodeList list = document.getElementsByTagName("name");
 
 			for (int temp = 0; temp < list.getLength(); temp++) {
@@ -52,9 +50,7 @@ public class LastFMHandler {
 				artists.add(node.getTextContent());
 			}
 
-			/*
-			 * for (String S : artists) { System.out.println(S); }
-			 */
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,17 +77,16 @@ public class LastFMHandler {
 			Element rootElement = doc.createElement("artisttags");
 			doc.appendChild(rootElement);
 
-			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
 			for (String A : artists) {
-				
+
 				Element t_artist = doc.createElement("artist");
 				Attr t_artistName = doc.createAttribute("name");
 				t_artistName.setValue(A);
 				t_artist.setAttributeNode(t_artistName);
-				rootElement.appendChild(t_artist);
+				doc.getDocumentElement().appendChild(t_artist);
 
 				url = new URL(
 						"http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist="
@@ -105,16 +100,16 @@ public class LastFMHandler {
 
 				NodeList list = document.getElementsByTagName("tag");
 
-				for (int temp = 0; temp < list.getLength(); temp++) {
+				int checkMAX = 0;
+				if (checkMAX<list.getLength()) checkMAX = MAXTAGS;
+				else checkMAX = list.getLength();
 				
-					
-					
+				for (int temp = 0; temp < checkMAX; temp++) {
+
 					Node node = list.item(temp);
 
-					
 					Element t_tag = doc.createElement("tag");
-					
-					
+
 					Attr t_tagCount = doc.createAttribute("count");
 					t_tagCount.setValue(node.getChildNodes().item(0)
 							.getTextContent().toString());
@@ -126,30 +121,27 @@ public class LastFMHandler {
 					t_tag.setAttributeNode(t_tagName);
 
 					t_artist.appendChild(t_tag);
-					
+
 				}
 
-				
 				TransformerFactory transformerFactory = TransformerFactory
 						.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
 				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+				transformer.setOutputProperty(
+						"{http://xml.apache.org/xslt}indent-amount", "2");
 				DOMSource source = new DOMSource(doc);
 				StreamResult result = new StreamResult(new File("T:\\test.xml"));
 				transformer.transform(source, result);
-				// Output to console for testing
-				//StreamResult consoleResult = new StreamResult(System.out);
-				//transformer.transform(source, consoleResult);
+
+				/*
+				 * 
+				 * // Output to console for testing //StreamResult consoleResult
+				 * = new StreamResult(System.out);
+				 * //transformer.transform(source, consoleResult);
+				 */
 
 			}
-
-			/*
-			 * 
-			 * BufferedReader br = new BufferedReader(new InputStreamReader(
-			 * url.openStream())); String strTemp = ""; while (null != (strTemp
-			 * = br.readLine())) { System.out.println(strTemp); }
-			 */
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -157,7 +149,4 @@ public class LastFMHandler {
 		}
 	}
 
-	private void initDoc() {
-
-	}
 }
