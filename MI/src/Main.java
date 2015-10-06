@@ -1,31 +1,70 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-
-
 
 
 public class Main {
 
-	public static final String APIKEY = "7d7d86e0683f91595c5d6784f12da0c5";
-
 	public static void main(String[] args) {
 
-	try {
-			URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=vad%20fruttik&api_key="+APIKEY);
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					url.openStream()));
-			String strTemp = "";
-			while (null != (strTemp = br.readLine())) {
-				System.out.println(strTemp);
+		LastFMHandler handler = new LastFMHandler();
+		handler.fetchArtistsByUser();
+		handler.fetchTags();
+		
+		
+	}
+}
+
+
+
+
+
+
+/*	Working code
+
+		
+		
+		URL url;
+		try {
+			url = new URL(
+					"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=nikolettk&api_key="
+							+ APIKEY);
+
+			// Read result into a Document object
+
+			URLConnection connection = url.openConnection();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			final Document document = db.parse(connection.getInputStream());
+			// ***
+			NodeList list = document.getElementsByTagName("name");
+			
+			for (int temp = 0; temp < list.getLength(); temp++) {
+		         Node node = list.item(temp);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			
+			// create another document
+			
+			
+			
+
+
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(new File("T:\\test.xml"));
+			transformer.transform(source, result);
+			// Output to console for testing
+			StreamResult consoleResult = new StreamResult(System.out);
+			transformer.transform(source, consoleResult);
+			
+
+			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 
 
 
-	
-}
-}
+*/
