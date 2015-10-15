@@ -1,14 +1,18 @@
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,36 +26,67 @@ public class LastFMHandler {
 	public static final String NAME = "nikolettk";
 	public static final int MAXTAGS = 10;
 	public static final int MAXCOUNT = 10;
-
+	public static final int MAXARTISTS = 10;
 
 	public LastFMHandler() {
 		artists = new ArrayList<String>();
 	}
 
-	public void fetchArtistsByUser() {
-		URL url;
+	private Document newDocument(URL url) {
 		try {
-			url = new URL(
-					"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user="
-							+ NAME + "&api_key=" + APIKEY);
-
-			// Read result into a Document object
-
 			URLConnection connection = url.openConnection();
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			final Document document = db.parse(connection.getInputStream());
-			// ***
-			
-			NodeList list = document.getElementsByTagName("name");
-
-			for (int temp = 0; temp < list.getLength(); temp++) {
-				Node node = list.item(temp);
-				artists.add(node.getTextContent());
-			}
-
+			return document;
 
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	private void docToFile(Document doc, File file) throws TransformerException {
+
+		TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(
+				"{http://xml.apache.org/xslt}indent-amount", "2");
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(file);
+		transformer.transform(source, result);
+
+	}
+
+	public void fetchArtistsByUser() {
+		URL url;
+
+		try {
+			
+			url = new URL(
+					"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user="
+							+ NAME + "&api_key=" + APIKEY);
+
+			NodeList artistList = newDocument(url).getElementsByTagName("name");
+
+			int checkMAX = 0;
+			if (checkMAX < artistList.getLength())
+				checkMAX = MAXARTISTS;
+			else
+				checkMAX = artistList.getLength();
+
+			for (int temp = 0; temp < checkMAX; temp++) {
+				Node node = artistList.item(temp);
+				artists.add(node.getTextContent());
+			}
+			
+			
+		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -77,9 +112,6 @@ public class LastFMHandler {
 			Element rootElement = doc.createElement("artisttags");
 			doc.appendChild(rootElement);
 
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-
 			for (String A : artists) {
 
 				Element t_artist = doc.createElement("artist");
@@ -92,18 +124,14 @@ public class LastFMHandler {
 						"http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist="
 								+ A + "&api_key=" + APIKEY);
 
-				URLConnection connection = url.openConnection();
-
-				Document document = db.newDocument();
-
-				document = db.parse(connection.getInputStream());
-
-				NodeList list = document.getElementsByTagName("tag");
+				NodeList list = newDocument(url).getElementsByTagName("tag");
 
 				int checkMAX = 0;
-				if (checkMAX<list.getLength()) checkMAX = MAXTAGS;
-				else checkMAX = list.getLength();
-				
+				if (checkMAX < list.getLength())
+					checkMAX = MAXTAGS;
+				else
+					checkMAX = list.getLength();
+
 				for (int temp = 0; temp < checkMAX; temp++) {
 
 					Node node = list.item(temp);
@@ -124,22 +152,7 @@ public class LastFMHandler {
 
 				}
 
-				TransformerFactory transformerFactory = TransformerFactory
-						.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				transformer.setOutputProperty(
-						"{http://xml.apache.org/xslt}indent-amount", "2");
-				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(new File("T:\\test.xml"));
-				transformer.transform(source, result);
-
-				/*
-				 * 
-				 * // Output to console for testing //StreamResult consoleResult
-				 * = new StreamResult(System.out);
-				 * //transformer.transform(source, consoleResult);
-				 */
+				docToFile(doc, new File("T:\\artistTags.xml"));
 
 			}
 
@@ -148,5 +161,6 @@ public class LastFMHandler {
 			e.printStackTrace();
 		}
 	}
+
 
 }

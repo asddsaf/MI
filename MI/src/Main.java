@@ -7,6 +7,5 @@ public class Main {
 		handler.fetchArtistsByUser();
 		handler.fetchTags();
 		
-		
 	}
 }
