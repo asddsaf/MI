@@ -2,6 +2,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,9 +25,9 @@ public class LastFMHandler {
 	private ArrayList<String> artists;
 	public static final String APIKEY = "7d7d86e0683f91595c5d6784f12da0c5";
 	public static final String NAME = "nikolettk";
-	public static final int MAXTAGS = 10;
-	public static final int MAXCOUNT = 10;
-	public static final int MAXARTISTS = 10;
+	public static final int MAXTAGS = 100;
+	public static final int MAXCOUNT = 100;
+	public static final int MAXARTISTS = 100;
 
 	public LastFMHandler() {
 		artists = new ArrayList<String>();
@@ -70,15 +71,14 @@ public class LastFMHandler {
 			
 			url = new URL(
 					"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user="
-							+ NAME + "&api_key=" + APIKEY);
+							+ NAME + "&limit=100&api_key=" + APIKEY);
 
 			NodeList artistList = newDocument(url).getElementsByTagName("name");
 
-			int checkMAX = 0;
-			if (checkMAX < artistList.getLength())
+			int checkMAX = artistList.getLength();
+			if (checkMAX > MAXARTISTS) {
 				checkMAX = MAXARTISTS;
-			else
-				checkMAX = artistList.getLength();
+			}
 
 			for (int temp = 0; temp < checkMAX; temp++) {
 				Node node = artistList.item(temp);
@@ -122,15 +122,14 @@ public class LastFMHandler {
 
 				url = new URL(
 						"http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist="
-								+ A + "&api_key=" + APIKEY);
+								+ URLEncoder.encode(A, "UTF-8") + "&api_key=" + APIKEY);
 
 				NodeList list = newDocument(url).getElementsByTagName("tag");
 
-				int checkMAX = 0;
-				if (checkMAX < list.getLength())
+				int checkMAX = list.getLength();
+				if (checkMAX > MAXTAGS) {
 					checkMAX = MAXTAGS;
-				else
-					checkMAX = list.getLength();
+				}
 
 				for (int temp = 0; temp < checkMAX; temp++) {
 
@@ -152,7 +151,7 @@ public class LastFMHandler {
 
 				}
 
-				docToFile(doc, new File("T:\\artistTags.xml"));
+				docToFile(doc, new File("C:\\new\\artistTags.xml"));
 
 			}
 
