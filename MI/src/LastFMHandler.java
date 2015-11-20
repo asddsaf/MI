@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -49,6 +50,41 @@ public class LastFMHandler {
 		return null;
 
 	}
+	
+	public void filterCount(){
+/*		int count[];
+		
+		try {
+		File fXmlFile = new File("C:\\new\\artistTags.xml");
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder;
+			dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(fXmlFile);
+		doc.getDocumentElement().normalize();
+		
+		NodeList nList = doc.getElementsByTagName("artist");
+		
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+
+			System.out.println("Előadó: "+nList.item(temp).getAttributes().getNamedItem("name"));
+			
+			NodeList nodeList = nList.item(temp).getChildNodes();
+
+			
+		
+			
+		}
+		
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
+	}
+	
+	
 
 	private void docToFile(Document doc, File file) throws TransformerException {
 
