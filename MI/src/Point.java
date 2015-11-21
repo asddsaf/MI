@@ -20,7 +20,6 @@ public class Point {
 	
 	
 	public Point(String name, int[] artists) {
-		this.artists = new int[100];
 		this.name = name;
 		this.artists = artists;
 	}

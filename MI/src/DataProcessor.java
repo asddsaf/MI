@@ -91,7 +91,7 @@ public class DataProcessor {
 			// megkeresni azokat az előadókat, akiknél van az adott tag
 			for (int i = 0; i < tagNodeList.getLength(); i++) {
 
-				int artistVector[] = new int[100];
+				int artistVector[] = new int[LastFMHandler.MAXARTISTS];
 
 				String tagName = tagNodeList.item(i).getNodeValue();
 

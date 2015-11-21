@@ -58,7 +58,7 @@ public class LastFMHandler {
 	public void filterCount() {
 
 		// ideiglenes tömb az előadókhoz tartozó tag átlag tárolására
-		double artistAvg[] = new double[100];
+		double artistAvg[] = new double[MAXARTISTS];
 
 		try {
 			File fXmlFile = new File("C:\\new\\artistTags.xml");
