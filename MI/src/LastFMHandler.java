@@ -14,6 +14,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -23,7 +27,7 @@ import org.w3c.dom.NodeList;
 
 public class LastFMHandler {
 
-	private ArrayList<String> artists;
+	public static ArrayList<String> artists;
 	public static final String APIKEY = "7d7d86e0683f91595c5d6784f12da0c5";
 	public static final String NAME = "nikolettk";
 	public static final int MAXTAGS = 100;
@@ -50,41 +54,97 @@ public class LastFMHandler {
 		return null;
 
 	}
-	
-	public void filterCount(){
-/*		int count[];
-		
+
+	public void filterCount() {
+
+		// ideiglenes tömb az előadókhoz tartozó tag átlag tárolására
+		double artistAvg[] = new double[100];
+
 		try {
-		File fXmlFile = new File("C:\\new\\artistTags.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
+			File fXmlFile = new File("C:\\new\\artistTags.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder;
 			dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(fXmlFile);
-		doc.getDocumentElement().normalize();
-		
-		NodeList nList = doc.getElementsByTagName("artist");
-		
-		for (int temp = 0; temp < nList.getLength(); temp++) {
+			Document doc = dBuilder.parse(fXmlFile);
+			doc.getDocumentElement().normalize();
 
-			System.out.println("Előadó: "+nList.item(temp).getAttributes().getNamedItem("name"));
-			
-			NodeList nodeList = nList.item(temp).getChildNodes();
+			// Az előadók kikeresése az xmlből
+			XPath xPath = XPathFactory.newInstance().newXPath();
+			String expression1 = "/artisttags/artist/@name";
+			NodeList artistNodeList = (NodeList) xPath.compile(expression1)
+					.evaluate(doc, XPathConstants.NODESET);
 
-			
-		
-			
-		}
-		
-		
+			for (int i = 0; i < artistNodeList.getLength(); i++) {
+				int avg = 0;
+				int sum = 0;
+
+				// Az előadókhoz tartozó tagek countját kapjuk meg itt
+				String artistName = artistNodeList.item(i).getNodeValue();
+				String expression2 = "/artisttags/artist[@name=\"" + artistName
+						+ "\"]/tag/@count";
+
+				XPath xPath2 = XPathFactory.newInstance().newXPath();
+				NodeList tagCountList = (NodeList) xPath2.compile(expression2)
+						.evaluate(doc, XPathConstants.NODESET);
+				// System.out.println(artistName);
+
+				for (int j = 0; j < tagCountList.getLength(); j++) {
+					sum = sum
+							+ Integer.valueOf(tagCountList.item(j)
+									.getNodeValue());
+				}
+
+				// Az átlag kiszámolása az adott előadóhoz és az érték
+				// ideiglenes tömbbe helyezése
+				if (sum != 0) {
+					avg = sum / tagCountList.getLength();
+					artistAvg[i] = avg;
+				}
+
+			}
+
+			// kiválasztjuk az átlagon aluli értékű tageket
+			for (int i = 0; i < artistNodeList.getLength(); i++) {
+
+				String artistName = artistNodeList.item(i).getNodeValue();
+
+				XPath xPath3 = XPathFactory.newInstance().newXPath();
+				String expression3 = "/artisttags/artist[@name=\"" + artistName
+						+ "\"]/tag[@count<=" + artistAvg[i] + "]";
+				NodeList badTags = (NodeList) xPath3.compile(expression3)
+						.evaluate(doc, XPathConstants.NODESET);
+
+
+				// töröljük a rossz tageket
+				for (int j = 0; j < badTags.getLength(); j++) {
+					badTags.item(j).getParentNode()
+							.removeChild(badTags.item(j));
+				}
+
+				// A törlés után üres sorok jönnek létre, ezért azokat itt
+				// töröljük
+				XPath xp = XPathFactory.newInstance().newXPath();
+				NodeList emptyNodeList = (NodeList) xp.evaluate(
+						"//text()[normalize-space(.)='']", doc,
+						XPathConstants.NODESET);
+
+				for (int k = 0; k < emptyNodeList.getLength(); ++k) {
+					Node emptyNode = emptyNodeList.item(k);
+					emptyNode.getParentNode().removeChild(emptyNode);
+				}
+
+				// a változások fájlba írása
+				docToFile(doc, new File("C:\\new\\artistTags.xml"));
+
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
-		
+
 	}
-	
-	
 
 	private void docToFile(Document doc, File file) throws TransformerException {
 
@@ -104,7 +164,7 @@ public class LastFMHandler {
 		URL url;
 
 		try {
-			
+
 			url = new URL(
 					"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user="
 							+ NAME + "&limit=100&api_key=" + APIKEY);
@@ -120,8 +180,7 @@ public class LastFMHandler {
 				Node node = artistList.item(temp);
 				artists.add(node.getTextContent());
 			}
-			
-			
+
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,7 +188,7 @@ public class LastFMHandler {
 
 	}
 
-	public ArrayList<String> getArtistNames() {
+	public static ArrayList<String> getArtistNames() {
 		return artists;
 	}
 
@@ -158,7 +217,8 @@ public class LastFMHandler {
 
 				url = new URL(
 						"http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist="
-								+ URLEncoder.encode(A, "UTF-8") + "&api_key=" + APIKEY);
+								+ URLEncoder.encode(A, "UTF-8") + "&api_key="
+								+ APIKEY);
 
 				NodeList list = newDocument(url).getElementsByTagName("tag");
 
@@ -196,6 +256,5 @@ public class LastFMHandler {
 			e.printStackTrace();
 		}
 	}
-
 
 }
