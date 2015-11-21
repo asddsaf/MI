@@ -14,9 +14,9 @@ import org.w3c.dom.NodeList;
 
 public class DataProcessor {
 
-	//egyedi tagek listája
+	// egyedi tagek listája
 	private ArrayList<String> tags;
-	//létrehozott pontok listája
+	// létrehozott pontok listája
 	private ArrayList<Point> points;
 
 	public DataProcessor() {
@@ -70,14 +70,10 @@ public class DataProcessor {
 
 	}
 
-	
-	
-	
-	//TODO IN PROGRESS: Hamming távolságos pontoknál, hogy átlagoljuk a centroidot?
+	// TODO IN PROGRESS: Hamming távolságos pontoknál, hogy átlagoljuk a
+	// centroidot?
 	public void createPoints() {
-		
-		
-		
+
 		try {
 			File fXmlFile = new File("C:\\new\\artistTags.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
@@ -86,63 +82,67 @@ public class DataProcessor {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
-			
-			
+
 			XPath xPath = XPathFactory.newInstance().newXPath();
 			String expression1 = "/artisttags/artist/tag/@name";
 			NodeList tagNodeList = (NodeList) xPath.compile(expression1)
 					.evaluate(doc, XPathConstants.NODESET);
-			
-			
-			//megkeresni azokat az előadókat, akiknél van az adott tag
+
+			// megkeresni azokat az előadókat, akiknél van az adott tag
 			for (int i = 0; i < tagNodeList.getLength(); i++) {
+
 				int artistVector[] = new int[100];
-				
+
 				String tagName = tagNodeList.item(i).getNodeValue();
-				
+
 				XPath xPath2 = XPathFactory.newInstance().newXPath();
-				String expression2 = "/artisttags/artist[tag[@name=\"" + tagName + "\"]]";
+				String expression2 = "/artisttags/artist[tag[@name=\""
+						+ tagName + "\"]]";
 				NodeList artistNodeList = (NodeList) xPath.compile(expression2)
 						.evaluate(doc, XPathConstants.NODESET);
-				
-				//System.out.println("Tag: "+tagName+"\n");
-				
-				//tömbbe beállítjuk az adott indexen az 1-est
+
+				// System.out.println("Tag: "+tagName+"\n");
+
+				// tömbbe beállítjuk az adott indexen az 1-est
 				for (int j = 0; j < artistNodeList.getLength(); j++) {
-					
-					int indexOfArtist = LastFMHandler.getArtistNames().indexOf(artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent());
-					//System.out.println(indexOfArtist);
+
+					int indexOfArtist = LastFMHandler.getArtistNames().indexOf(
+							artistNodeList.item(j).getAttributes()
+									.getNamedItem("name").getTextContent());
+					// System.out.println(indexOfArtist);
 					artistVector[indexOfArtist] = 1;
-					//System.out.println(artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent());
-					
+					// System.out.println(artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent());
+
 				}
-				
-				points.add(new Point(tagName,artistVector));
-				
-				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt", "UTF-8");
-				
-				for(Point p: points){
-					writer.println(p.getName()+"\n****************************");
-					for(int k:p.getArtists())
-					writer.println(k);
+
+				// A tags-be egyszer már kigyűjtöttük az egyedi tageket, itt ezt
+				// használjuk fel úgy, hogy ha még nem volt az adott tag, akkor
+				// töröljük belőle és hozzáadjuk a pontok halmazához, így ha
+				// mégegyszer ugyanaz a tag következne, az már nem kerül bele
+				if (tags.contains(tagName)) {
+					points.add(new Point(tagName, artistVector));
+					tags.remove(tags.indexOf(tagName));
 				}
-				
-				
+
+				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt",
+						"UTF-8");
+
+				for (Point p : points) {
+					writer.println(p.getName()
+							+ "\n****************************");
+					for (int k : p.getArtists())
+						writer.println(k);
+				}
+
 				writer.close();
-				//System.out.println("\n*****************************************************");
-				
+				// System.out.println("\n*****************************************************");
+
 			}
-			
-			
-			
-			
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 
 	}
 
