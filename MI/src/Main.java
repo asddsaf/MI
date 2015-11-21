@@ -14,5 +14,7 @@ public class Main {
 		DataProcessor dp = new DataProcessor();
 		System.out.println("Processing data for clustering...");
 		dp.process();
+		
+		
 	}
 }

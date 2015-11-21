@@ -27,4 +27,5 @@ public class Cluster {
 		this.centroid = centroid;
 	}
 	
+	
 }

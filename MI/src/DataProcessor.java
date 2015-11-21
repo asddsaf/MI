@@ -17,7 +17,7 @@ public class DataProcessor {
 	// egyedi tagek listája
 	private ArrayList<String> tags;
 	// létrehozott pontok listája
-	private ArrayList<Point> points;
+	private static ArrayList<Point> points;
 
 	public DataProcessor() {
 		this.tags = new ArrayList<String>();
@@ -146,9 +146,15 @@ public class DataProcessor {
 
 	}
 
+	
+	
 	// A feldolgozás minden része ebben a függvényben fut le
 	public void process() {
 		filterTags();
 		createPoints();
+	}
+
+	public static ArrayList<Point> getPoints(){
+		return points;
 	}
 }
