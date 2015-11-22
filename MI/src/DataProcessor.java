@@ -1,6 +1,9 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -152,6 +155,27 @@ public class DataProcessor {
 	public void process() {
 		filterTags();
 		createPoints();
+		KMeans kmeans = new KMeans();
+		Point[] initialCentroids = {points.get(0), points.get(50)};
+		kmeans.createClusters(2, initialCentroids);
+		
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("C:\\new\\kmeans.txt","UTF-8");
+			
+			for(int i = 0; i<2; i++) {
+				writer.println((int)(i+1) + "klaszter: ");
+				
+				ArrayList<Point> resultpoints = kmeans.clusters.get(i).getPoints();
+		
+				for (int j = 0; j<resultpoints.size(); j++) {
+					writer.println(resultpoints.get(j).getName() + ", " + Arrays.toString(resultpoints.get(j).getArtists()));	
+				}
+			}
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static ArrayList<Point> getPoints(){
