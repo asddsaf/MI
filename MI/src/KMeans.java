@@ -14,8 +14,9 @@ public class KMeans {
 	}
 	
 	//kell k: hány klasztert akarunk, és kellenek a kezdõ centroidok (k db)
-	//végén: az kell, hogy az egyes klaszterekben mely pontok vannak együtt
+	//végén: kell, hogy az egyes klaszterekben mely pontok vannak együtt
 	public void createClusters(int k, Point[] initialCentroids){
+		
 		//létrehozunk k üres klasztert
 		for (int i = 0; i<k; i++) {
 			clusters.add(new Cluster(new ArrayList<Point>(), initialCentroids[i]));
@@ -23,31 +24,59 @@ public class KMeans {
 		
 		boolean changed = true; //addig megyünk, amíg elõfordul olyan, hogy 1 pontot másik klaszterbe sorolunk
 		
+		boolean clusterChanged = false; //klaszterváltás jelzése
+		
 		while(changed) {
 			
 			for (int i = 0; i<points.size(); i++) { //végigmegyünk az összes ponton
 				
 				int distance = 150; //ez béna, de egyelõre megteszi
-				int clusterNum = 0;
+				int nextCluster = 0;		
+				int actualCluster = 0;
 				
 				for (int j = 0; j<k; j++) { //és megkeressük, melyik klaszterhez van közelebb
+					
+					//eltároljuk, hogy melyik klaszterben van most a pont
+					actualCluster = clusters.get(j).getPoints().indexOf(points.get(i));
+					
 					int tempDistance = Point.distance(points.get(i), clusters.get(j).getCentroid());
 					if (tempDistance < distance) {
 						distance = tempDistance;
-						clusterNum = j;
+						nextCluster = j;
 					}
 				}
 				
-				//TODO: i. pont kivétele az aktuális klaszterébõl, ha az más, mint a most megtalált
-				//TODO: changed változót állítani
+				clusterChanged = false;
+				//i. pont kivétele az aktuális klaszterébõl, ha az más, mint a most megtalált
+				if (actualCluster != -1 && nextCluster != actualCluster) {
+					
+					clusters.get(actualCluster).removePoint(points.get(i));
+					
+					//i. pontot besoroljuk a megtalált klaszterbe
+					clusters.get(nextCluster).addPoint(points.get(i));
+					
+					//jelezzük, hogy történt klaszterváltás
+					clusterChanged = true;
+				}
+				else if (actualCluster == -1) {
+					//i. pontot besoroljuk a megtalált klaszterbe, ha éppen nincs egy klaszterben sem (elsõ iterációnál fordul elõ)
+					clusters.get(nextCluster).addPoint(points.get(i));
+				}
 				
-				//megtaláltuk az i. ponthoz tartozó legközelebbi klasztert (clusterNum), ebbe soroljuk
-				clusters.get(clusterNum).addPoint(points.get(i));
+				//ha nem történt átsorolás (egy pont másik klaszterbe tevése), akkor megáll az algoritmus
+				if (!clusterChanged) {
+					changed = false;
+				}
 			}
-			//miután minden pontot besoroltunk a megfelelõ klaszterbe, kiszámítjuk a klaszterek új centroidját
-			for (int i = 0; i<k; i++) {
-				Point newCentroid = new Point("centroid", clusters.get(i).calculateCentroid());
-				clusters.get(i).setCentroid(newCentroid);
+			
+			if (clusterChanged) {
+				//miután minden pontot besoroltunk a megfelelõ klaszterbe, kiszámítjuk a klaszterek új centroidját
+				for (int i = 0; i<k; i++) {
+					
+					Point newCentroid = new Point("centroid", clusters.get(i).calculateCentroid());
+					
+					clusters.get(i).setCentroid(newCentroid);
+				}
 			}
 		}
 	}
