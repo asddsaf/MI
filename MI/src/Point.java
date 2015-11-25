@@ -4,7 +4,7 @@ public class Point {
 	private int[] artists;
 
 	
-	//visszaadja a Hamming tÃ¡volsÃ¡got kÃ©t pont kÃ¶zÃ¶tt
+	//visszaadja a Hamming távolságot két pont között
 	public static int distance(Point p1, Point p2){
 		int d = 0;
 		

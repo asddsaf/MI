@@ -17,9 +17,9 @@ import org.w3c.dom.NodeList;
 
 public class DataProcessor {
 
-	// egyedi tagek list√°ja
+	// egyedi tagek list·ja
 	private ArrayList<String> tags;
-	// l√©trehozott pontok list√°ja
+	// lÈtrehozott pontok list·ja
 	private static ArrayList<Point> points;
 
 	public DataProcessor() {
@@ -27,7 +27,7 @@ public class DataProcessor {
 		this.points = new ArrayList<Point>();
 	}
 
-	// xml beolvas√°sa √©s a param√©terben megadott tag-ek visszaad√°sa
+	// xml beolvas·sa ·s a param·terben megadott tag-ek visszaad·sa
 	public NodeList fetchFromXml(String tagName) {
 
 		try {
@@ -52,11 +52,11 @@ public class DataProcessor {
 
 	}
 
-	// Az xml f√°jlb√≥l kiolvassuk az √∂sszes tag-et √©s az egyedi tag-eket egy
-	// list√°ba tessz√ºk
+	// Az xml f·jlbÛl kiolvassuk az ˆsszes tag-et Ès az egyedi tag-eket egy
+	// list·ba tessz¸k
 	public void filterTags() {
 
-		// a tag-ek kiv√°laszt√°sa, majd list√°ba rak√°sa
+		// a tag-ek kiv·laszt·sa, majd list·ba rak·sa
 		NodeList nList = fetchFromXml("tag");
 
 		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -73,8 +73,7 @@ public class DataProcessor {
 
 	}
 
-	// TODO IN PROGRESS: Hamming t√°vols√°gos pontokn√°l, hogy √°tlagoljuk a
-	// centroidot?
+	
 	public void createPoints() {
 
 		try {
@@ -91,7 +90,7 @@ public class DataProcessor {
 			NodeList tagNodeList = (NodeList) xPath.compile(expression1)
 					.evaluate(doc, XPathConstants.NODESET);
 
-			// megkeresni azokat az el≈ëad√≥kat, akikn√©l van az adott tag
+			// megkeresni azokat az elıadÛkat, akiknÈl van az adott tag
 			for (int i = 0; i < tagNodeList.getLength(); i++) {
 
 				int artistVector[] = new int[LastFMHandler.MAXARTISTS];
@@ -106,7 +105,7 @@ public class DataProcessor {
 
 				// System.out.println("Tag: "+tagName+"\n");
 
-				// t√∂mbbe be√°ll√≠tjuk az adott indexen az 1-est
+				// tˆmbbe be·llÌtjuk az adott indexen az 1-est
 				for (int j = 0; j < artistNodeList.getLength(); j++) {
 
 					int indexOfArtist = LastFMHandler.getArtistNames().indexOf(
@@ -118,10 +117,10 @@ public class DataProcessor {
 
 				}
 
-				// A tags-be egyszer m√°r kigy≈±jt√∂tt√ºk az egyedi tageket, itt ezt
-				// haszn√°ljuk fel √∫gy, hogy ha m√©g nem volt az adott tag, akkor
-				// t√∂r√∂lj√ºk bel≈ële √©s hozz√°adjuk a pontok halmaz√°hoz, √≠gy ha
-				// m√©gegyszer ugyanaz a tag k√∂vetkezne, az m√°r nem ker√ºl bele
+				// A tags-be egyszer m·r kigy˚jtˆtt¸k az egyedi tageket, itt ezt
+				// haszn·juk fel ˙gy, hogy ha mÈg nem volt az adott tag, akkor
+				// tˆrˆlj¸k belıle Ès hozz·adjuk a pontok halmaz·hoz, Ìgy ha
+				// mÈgegyszer ugyanaz a tag kˆvetkezne, az m·r nem ker¸l bele
 				if (tags.contains(tagName)) {
 					points.add(new Point(tagName, artistVector));
 					tags.remove(tags.indexOf(tagName));
@@ -151,7 +150,7 @@ public class DataProcessor {
 
 	
 	
-	// A feldolgoz√°s minden r√©sze ebben a f√ºggv√©nyben fut le
+	// A feldolgoz·s minden rÈsze ebben a f¸ggvÈnyben fut le
 	public void process() {
 		filterTags();
 		createPoints();

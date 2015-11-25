@@ -57,7 +57,7 @@ public class LastFMHandler {
 
 	public void filterCount() {
 
-		// ideiglenes tÃ¶mb az elÅ‘adÃ³khoz tartozÃ³ tag Ã¡tlag tÃ¡rolÃ¡sÃ¡ra
+		// ideiglenes tömb az elõadókhoz tartozó tag átlag tárolására
 		double artistAvg[] = new double[MAXARTISTS];
 
 		try {
@@ -79,7 +79,7 @@ public class LastFMHandler {
 				int avg = 0;
 				int sum = 0;
 
-				// Az elÅ‘adÃ³khoz tartozÃ³ tagek countjÃ¡t kapjuk meg itt
+				// Az elõadókhoz tartozó tagek countját kapjuk meg itt
 				String artistName = artistNodeList.item(i).getNodeValue();
 				String expression2 = "/artisttags/artist[@name=\"" + artistName
 						+ "\"]/tag/@count";
@@ -95,8 +95,8 @@ public class LastFMHandler {
 									.getNodeValue());
 				}
 
-				// Az Ã¡tlag kiszÃ¡molÃ¡sa az adott elÅ‘adÃ³hoz Ã©s az Ã©rtÃ©k
-				// ideiglenes tÃ¶mbbe helyezÃ©se
+				// Az átlag kiszámolása az adott elõadóhoz és az érték
+				// ideiglenes tömbbe helyezése
 				if (sum != 0) {
 					avg = sum / tagCountList.getLength();
 					artistAvg[i] = avg;
@@ -104,7 +104,7 @@ public class LastFMHandler {
 
 			}
 
-			// kivÃ¡lasztjuk az Ã¡tlagon aluli Ã©rtÃ©kÅ± tageket
+			// kiválasztjuk az átlagon aluli értékû tageket
 			for (int i = 0; i < artistNodeList.getLength(); i++) {
 
 				String artistName = artistNodeList.item(i).getNodeValue();
@@ -116,14 +116,14 @@ public class LastFMHandler {
 						.evaluate(doc, XPathConstants.NODESET);
 
 
-				// tÃ¶rÃ¶ljÃ¼k a rossz tageket
+				// töröljük a rossz tageket
 				for (int j = 0; j < badTags.getLength(); j++) {
 					badTags.item(j).getParentNode()
 							.removeChild(badTags.item(j));
 				}
 
-				// A tÃ¶rlÃ©s utÃ¡n Ã¼res sorok jÃ¶nnek lÃ©tre, ezÃ©rt azokat itt
-				// tÃ¶rÃ¶ljÃ¼k
+				// A törlés után üres sorok jönnek létre, ezért azokat itt
+				// töröljük
 				XPath xp = XPathFactory.newInstance().newXPath();
 				NodeList emptyNodeList = (NodeList) xp.evaluate(
 						"//text()[normalize-space(.)='']", doc,
