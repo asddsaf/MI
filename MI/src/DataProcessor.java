@@ -28,7 +28,7 @@ public class DataProcessor {
 	}
 
 	// xml beolvasása ás a paramáterben megadott tag-ek visszaadása
-	public NodeList fetchFromXml(String tagName) {
+	private NodeList fetchFromXml(String tagName) {
 
 		try {
 			File fXmlFile = new File("C:\\new\\artistTags.xml");
@@ -54,7 +54,7 @@ public class DataProcessor {
 
 	// Az xml fájlból kiolvassuk az összes tag-et és az egyedi tag-eket egy
 	// listába tesszük
-	public void filterTags() {
+	private void filterTags() {
 
 		// a tag-ek kiválasztása, majd listába rakása
 		NodeList nList = fetchFromXml("tag");
@@ -74,7 +74,7 @@ public class DataProcessor {
 	}
 
 	
-	public void createPoints() {
+	private void createPoints() {
 
 		try {
 			File fXmlFile = new File("C:\\new\\artistTags.xml");
@@ -154,27 +154,7 @@ public class DataProcessor {
 	public void process() {
 		filterTags();
 		createPoints();
-		KMeans kmeans = new KMeans();
-		Point[] initialCentroids = {points.get(0), points.get(50)};
-		kmeans.createClusters(2, initialCentroids);
 		
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter("C:\\new\\kmeans.txt","UTF-8");
-			
-			for(int i = 0; i<2; i++) {
-				writer.println((int)(i+1) + "klaszter: ");
-				
-				ArrayList<Point> resultpoints = kmeans.clusters.get(i).getPoints();
-		
-				for (int j = 0; j<resultpoints.size(); j++) {
-					writer.println(resultpoints.get(j).getName() + ", " + Arrays.toString(resultpoints.get(j).getArtists()));	
-				}
-			}
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static ArrayList<Point> getPoints(){

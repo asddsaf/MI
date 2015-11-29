@@ -134,7 +134,7 @@ public class LastFMHandler {
 					emptyNode.getParentNode().removeChild(emptyNode);
 				}
 
-				// a vÃ¡ltozÃ¡sok fÃ¡jlba Ã­rÃ¡sa
+				// a változások fájlba írása
 				docToFile(doc, new File("C:\\new\\artistTags.xml"));
 
 			}
