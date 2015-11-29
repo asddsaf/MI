@@ -14,8 +14,8 @@ public class Main {
 		System.out.println("Filtering Tag counts...");
 		handler.filterCount();
 		
-		DataProcessor dp = new DataProcessor();
 		System.out.println("Processing data for clustering...");
+		DataProcessor dp = new DataProcessor();
 		dp.process();
 		
 		System.out.println("K-means clustering...");

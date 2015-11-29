@@ -44,7 +44,6 @@ public class DataProcessor {
 			return nodeList;
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -142,7 +141,6 @@ public class DataProcessor {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

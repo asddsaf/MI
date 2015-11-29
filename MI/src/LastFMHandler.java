@@ -47,7 +47,6 @@ public class LastFMHandler {
 			return document;
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -69,7 +68,7 @@ public class LastFMHandler {
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
 
-			// Az el≈ëad√≥k kikeres√©se az xmlb≈ël
+			// Az elıadÛk kikeresÈse az xmlbıl
 			XPath xPath = XPathFactory.newInstance().newXPath();
 			String expression1 = "/artisttags/artist/@name";
 			NodeList artistNodeList = (NodeList) xPath.compile(expression1)
@@ -140,7 +139,6 @@ public class LastFMHandler {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -182,7 +180,6 @@ public class LastFMHandler {
 			}
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -252,7 +249,6 @@ public class LastFMHandler {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
