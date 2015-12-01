@@ -113,13 +113,13 @@ public class KMeans {
 		}
 	}
 
-	public void writeToFile() {
+	public void writeToFile(String filename) {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("C:\\new\\kmeans.txt", "UTF-8");
+			writer = new PrintWriter("C:\\new\\"+ filename +".txt", "UTF-8");
 
 			for (int i = 0; i < clusters.size(); i++) {
-				writer.println("\n"+(int) (i + 1) + "klaszter: \n");
+				writer.println("\n\n"+(int) (i + 1) + ". klaszter: \n\n");
 
 				ArrayList<Point> resultpoints = clusters.get(i).getPoints();
 
