@@ -8,11 +8,11 @@ public class KMeans {
 	ArrayList<Point> points;
 	ArrayList<Cluster> clusters;
 
-	public KMeans() {
+	public KMeans(ArrayList<Point> pointlist) {
 		points = new ArrayList<Point>();
 		clusters = new ArrayList<Cluster>();
 
-		points = DataProcessor.getPoints();
+		points = pointlist;
 	}
 
 	private ArrayList<Point> chooseCentroids(int k, int numberOfTags) {
@@ -67,8 +67,7 @@ public class KMeans {
 					actualCluster = clusters.get(j).getPoints()
 							.indexOf(points.get(i));
 
-					int tempDistance = Point.distance(points.get(i), clusters
-							.get(j).getCentroid());
+					int tempDistance = points.get(i).distance(clusters.get(j).getCentroid());
 					if (tempDistance < distance) {
 						distance = tempDistance;
 						nextCluster = j;

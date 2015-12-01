@@ -19,12 +19,14 @@ public class DataProcessor {
 
 	// egyedi tagek listája
 	private ArrayList<String> tags;
-	// létrehozott pontok listája
-	private static ArrayList<Point> points;
+	// létrehozott pontok listája - bináris alakban
+	private static ArrayList<Point> binaryPoints;
+	//létrehozott pontok listája - count alapján, decimális alakban
+	private static ArrayList<Point> decimalPoints;
 
 	public DataProcessor() {
 		this.tags = new ArrayList<String>();
-		this.points = new ArrayList<Point>();
+		this.binaryPoints = new ArrayList<Point>();
 	}
 
 	// xml beolvasása ás a paramáterben megadott tag-ek visszaadása
@@ -88,18 +90,23 @@ public class DataProcessor {
 			String expression1 = "/artisttags/artist/tag/@name";
 			NodeList tagNodeList = (NodeList) xPath.compile(expression1)
 					.evaluate(doc, XPathConstants.NODESET);
+			
+			XPath xPath3 = XPathFactory.newInstance().newXPath();
+			String expression3 = "/artisttags/artist/tag/@count";
+			NodeList countNodeList = (NodeList) xPath3.compile(expression3)
+					.evaluate(doc, XPathConstants.NODESET);
 
 			// megkeresni azokat az elõadókat, akiknél van az adott tag
 			for (int i = 0; i < tagNodeList.getLength(); i++) {
 
-				int artistVector[] = new int[LastFMHandler.MAXARTISTS];
+				int binaryArtistVector[] = new int[LastFMHandler.MAXARTISTS];
 
 				String tagName = tagNodeList.item(i).getNodeValue();
 
 				XPath xPath2 = XPathFactory.newInstance().newXPath();
 				String expression2 = "/artisttags/artist[tag[@name=\""
 						+ tagName + "\"]]";
-				NodeList artistNodeList = (NodeList) xPath.compile(expression2)
+				NodeList artistNodeList = (NodeList) xPath2.compile(expression2)
 						.evaluate(doc, XPathConstants.NODESET);
 
 				// System.out.println("Tag: "+tagName+"\n");
@@ -111,7 +118,7 @@ public class DataProcessor {
 							artistNodeList.item(j).getAttributes()
 									.getNamedItem("name").getTextContent());
 					// System.out.println(indexOfArtist);
-					artistVector[indexOfArtist] = 1;
+					binaryArtistVector[indexOfArtist] = 1;
 					// System.out.println(artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent());
 
 				}
@@ -121,14 +128,14 @@ public class DataProcessor {
 				// töröljük belõle és hozzáadjuk a pontok halmazához, így ha
 				// mégegyszer ugyanaz a tag következne, az már nem kerül bele
 				if (tags.contains(tagName)) {
-					points.add(new Point(tagName, artistVector));
+					binaryPoints.add(new BinaryPoint(tagName, binaryArtistVector));
 					tags.remove(tags.indexOf(tagName));
 				}
 
 				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt",
 						"UTF-8");
 
-				for (Point p : points) {
+				for (Point p : binaryPoints) {
 					writer.println(p.getName()
 							+ "\n****************************");
 					for (int k : p.getArtists())
@@ -155,7 +162,11 @@ public class DataProcessor {
 		
 	}
 
-	public static ArrayList<Point> getPoints(){
-		return points;
+	public ArrayList<Point> getBinaryPoints(){
+		return binaryPoints;
+	}
+	
+	public ArrayList<Point> getDecimalPoints(){
+		return decimalPoints;
 	}
 }

@@ -19,7 +19,7 @@ public class Main {
 		dp.process();
 		
 		System.out.println("K-means clustering...");
-		KMeans kmeans = new KMeans();
+		KMeans kmeans = new KMeans(dp.getBinaryPoints());
 		kmeans.createClusters(KMEANS, LastFMHandler.MAXTAGS);
 		kmeans.writeToFile();
 
