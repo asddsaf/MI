@@ -119,7 +119,7 @@ public class KMeans {
 			writer = new PrintWriter("C:\\new\\"+ filename +".txt", "UTF-8");
 
 			for (int i = 0; i < clusters.size(); i++) {
-				writer.println("\n\n"+(int) (i + 1) + ". klaszter: \n\n");
+				writer.println("\n\r\n\r"+(int) (i + 1) + ". klaszter: \n\r\n\r");
 
 				ArrayList<Point> resultpoints = clusters.get(i).getPoints();
 
