@@ -20,7 +20,7 @@ public class Main {
 		
 		System.out.println("K-means clustering...");
 		KMeans kmeans = new KMeans(dp.getBinaryPoints());
-		kmeans.createClusters(KMEANS, LastFMHandler.MAXTAGS);
+		kmeans.createClusters(KMEANS, dp.getTagCount());
 		kmeans.writeToFile();
 
 		System.out.println("Done!");

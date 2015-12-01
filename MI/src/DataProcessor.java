@@ -19,6 +19,8 @@ public class DataProcessor {
 
 	// egyedi tagek listája
 	private ArrayList<String> tags;
+	//egyedi tagek száma
+	private int tagCount;
 	// létrehozott pontok listája - bináris alakban
 	private static ArrayList<Point> binaryPoints;
 	//létrehozott pontok listája - count alapján, decimális alakban
@@ -27,6 +29,7 @@ public class DataProcessor {
 	public DataProcessor() {
 		this.tags = new ArrayList<String>();
 		this.binaryPoints = new ArrayList<Point>();
+		this.decimalPoints = new ArrayList<Point>();
 	}
 
 	// xml beolvasása ás a paramáterben megadott tag-ek visszaadása
@@ -71,6 +74,8 @@ public class DataProcessor {
 			}
 
 		}
+		
+		tagCount = tags.size();
 
 	}
 
@@ -90,16 +95,12 @@ public class DataProcessor {
 			String expression1 = "/artisttags/artist/tag/@name";
 			NodeList tagNodeList = (NodeList) xPath.compile(expression1)
 					.evaluate(doc, XPathConstants.NODESET);
-			
-			XPath xPath3 = XPathFactory.newInstance().newXPath();
-			String expression3 = "/artisttags/artist/tag/@count";
-			NodeList countNodeList = (NodeList) xPath3.compile(expression3)
-					.evaluate(doc, XPathConstants.NODESET);
 
 			// megkeresni azokat az elõadókat, akiknél van az adott tag
 			for (int i = 0; i < tagNodeList.getLength(); i++) {
 
 				int binaryArtistVector[] = new int[LastFMHandler.MAXARTISTS];
+				int decimalArtistVector[] = new int[LastFMHandler.MAXARTISTS];
 
 				String tagName = tagNodeList.item(i).getNodeValue();
 
@@ -108,18 +109,26 @@ public class DataProcessor {
 						+ tagName + "\"]]";
 				NodeList artistNodeList = (NodeList) xPath2.compile(expression2)
 						.evaluate(doc, XPathConstants.NODESET);
-
-				// System.out.println("Tag: "+tagName+"\n");
-
-				// tömbbe beállítjuk az adott indexen az 1-est
+				
+				
+				// tömbbe beállítjuk az adott indexen az 1-est (bináris) és a súlyt (decimális)
 				for (int j = 0; j < artistNodeList.getLength(); j++) {
 
 					int indexOfArtist = LastFMHandler.getArtistNames().indexOf(
 							artistNodeList.item(j).getAttributes()
 									.getNamedItem("name").getTextContent());
-					// System.out.println(indexOfArtist);
 					binaryArtistVector[indexOfArtist] = 1;
-					// System.out.println(artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent());
+					
+					//kell: a kiválasztott elõadóknál mennyi ennek a tagnek a súlya
+					XPath xPath3 = XPathFactory.newInstance().newXPath();
+					String expression3 = "/artisttags/artist[@name=\"" 
+							+ artistNodeList.item(j).getAttributes().getNamedItem("name").getTextContent()
+							+ "\"]/tag[@name=\"" + tagName + "\"]";
+					NodeList countNodeList = (NodeList) xPath3.compile(expression3)
+							.evaluate(doc, XPathConstants.NODESET);
+					
+					decimalArtistVector[indexOfArtist] = Integer.parseInt(
+							countNodeList.item(0).getAttributes().getNamedItem("count").getTextContent());
 
 				}
 
@@ -129,13 +138,14 @@ public class DataProcessor {
 				// mégegyszer ugyanaz a tag következne, az már nem kerül bele
 				if (tags.contains(tagName)) {
 					binaryPoints.add(new BinaryPoint(tagName, binaryArtistVector));
+					decimalPoints.add(new DecimalPoint(tagName, decimalArtistVector));
 					tags.remove(tags.indexOf(tagName));
 				}
 
 				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt",
 						"UTF-8");
 
-				for (Point p : binaryPoints) {
+				for (Point p : decimalPoints) {
 					writer.println(p.getName()
 							+ "\n****************************");
 					for (int k : p.getArtists())
@@ -168,5 +178,10 @@ public class DataProcessor {
 	
 	public ArrayList<Point> getDecimalPoints(){
 		return decimalPoints;
+	}
+	
+	public int getTagCount() {
+		if (tagCount>LastFMHandler.MAXTAGS) return LastFMHandler.MAXTAGS;
+		return tagCount;
 	}
 }
