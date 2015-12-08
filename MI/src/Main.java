@@ -2,7 +2,7 @@
 public class Main {
 
 	
-	private static final int KMEANS = 15;
+	private static final int K = 15;
 	
 	public static void main(String[] args) {
 
@@ -20,14 +20,18 @@ public class Main {
 		
 		System.out.println("K-means clustering with binary vectors...");
 		KMeans kmeans = new KMeans(dp.getBinaryPoints());
-		kmeans.createClusters(KMEANS, dp.getTagCount());
+		kmeans.createClusters(K, dp.getTagCount());
 		kmeans.writeToFile("kmeans_binary");
 		
 		System.out.println("K-means clustering with tagCount vectors...");
 		kmeans = new KMeans(dp.getDecimalPoints());
-		kmeans.createClusters(KMEANS, dp.getTagCount());
+		kmeans.createClusters(K, dp.getTagCount());
 		kmeans.writeToFile("kmeans_tagcount");
-
+		
+		System.out.println("Hierarchical clustering with tagCount vectors...");
+		Hierarchical hierarchical = new Hierarchical(dp.getDecimalPoints());
+		hierarchical.createClusters(K);
+		hierarchical.writeToFile("hierarchical_tagcount");
 
 		System.out.println("Done!");
 	}

@@ -38,6 +38,12 @@ public class Cluster {
 	public ArrayList<Point> getPoints() {
 		return points;
 	}
+
+	public void getDistance(Cluster cluster) {
+		// TODO Auto-generated method stub
+		//ebben a klaszterban lévõ összes elemet összehasonlítjuk a paraméterben szereplõ klaszter összes elemével
+		
+	}
 	
 	
 }
