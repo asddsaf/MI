@@ -17,7 +17,7 @@ public class Hierarchical {
 		Collections.sort(points, new Point());
 	}
 	
-	//k klaszternál áll meg, agglomerative, az egyes elemekt vonogatja nagyobb klaszterekké össze
+	//k klaszternál áll meg, agglomerative, az egyes elemeket vonogatja nagyobb klaszterekké össze
 	public void createClusters(int k) {
 		//minden elemnek létrehozunk egy saját klasztert
 		for (int i = 0; i<points.size(); i++) {
@@ -25,15 +25,39 @@ public class Hierarchical {
 			initial.add(points.get(i));
 			clusters.add(new Cluster(initial , null));
 		}
-		int clusterCount = 0;
-		if (clusterCount < k) {
+		int clusterCount = clusters.size();
+		while (clusterCount > k) {
+			int minDistance = 10000;
+			int c1 = 0; //e két klaszter között a legkisebb a távolság, ezeket kell majd összevonni
+			int c2 = 0;
 			//végigmegyünk az összes klaszteren, és megkeressük a 2 legkisebb távolságút
-			//mivel rendezett a pontok listája a címke neve szerint, így a sorrend megmarad
 			for (int i = 0; i<clusters.size(); i++) {
-				for (int j = i; j<clusters.size(); j++) {
-					clusters.get(i).getDistance(clusters.get(j));
+				for (int j = i+1; j<clusters.size(); j++) {
+					int actDist = clusters.get(i).getDistance(clusters.get(j));
+					if (actDist < minDistance) {
+						minDistance = actDist;
+						c1 = i;
+						c2 = j;
+					}
 				}
 			}
+			//megtaláltuk a két legközelebbi klasztert, össze kell vonni õket
+			ArrayList<Point> newpoints = clusters.get(c1).getPoints();
+			newpoints.addAll(clusters.get(c2).getPoints());
+			Collections.sort(newpoints, new Point());
+			Cluster cij = new Cluster(newpoints, null);
+			if (c1 < c2) {
+				clusters.remove(c2);
+				clusters.remove(c1);
+				clusters.add(c1, cij);
+			}
+			else {
+				clusters.remove(c1);
+				clusters.remove(c2);
+				clusters.add(c2, cij);
+			}
+			clusterCount = clusterCount - 1;
+			System.out.println("aktualis clustercount:" + clusterCount);
 		}
 	}
 	

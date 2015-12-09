@@ -28,7 +28,9 @@ public class Point implements Comparator<Point>{
 	
 	@Override
 	public int compare(Point o1, Point o2) {
-		return o1.name.compareTo(o2.name);
+		String o1name = o1.name.toLowerCase();
+		String o2name = o2.name.toLowerCase();
+		return o1name.compareTo(o2name);
 	}
 
 }
