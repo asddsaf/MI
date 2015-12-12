@@ -1,18 +1,23 @@
 import java.util.ArrayList;
 
 
-public class BinaryCluster extends Cluster{
+public class BinaryCluster extends Cluster<BinaryPoint>{
 
-	public BinaryCluster(ArrayList<Point> points, Point centroid) {
+	public BinaryCluster(ArrayList<BinaryPoint> points, BinaryPoint centroid) {
 		super(points, centroid);
 	}
-	
+	boolean b=true;
 	@Override
 	public int[] calculateCentroid() {
+		if(b){
+			System.out.println("BinaryCluster calculate");
+			b=false;
+		}
+
 		//majority vote alapján
 		int voteVector[] = new int[LastFMHandler.MAXARTISTS]; //ezeknél nem biztos, hogy jó a maxartists, mert nincs annyi
 		int resultVector[] = new int[LastFMHandler.MAXARTISTS];
-		ArrayList<Point> points = getPoints();
+		ArrayList<BinaryPoint> points = getPoints();
 		for (int j = 0; j<LastFMHandler.MAXARTISTS; j++) {
 			for (int i = 0; i<points.size(); i++) {
 				int[] artists = points.get(i).getArtists();

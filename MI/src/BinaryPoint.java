@@ -4,10 +4,11 @@ public class BinaryPoint extends Point {
 	public BinaryPoint(String name, int[] artists) {
 		super(name, artists);
 	}
-
+	
 	//Hamming távolság 2 pont között
 	@Override
 	public int distance(Point p1) {
+
 		int d = 0;
 		
 		int p1Array[] = p1.getArtists();

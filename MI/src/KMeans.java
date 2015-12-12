@@ -3,26 +3,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class KMeans {
+public class KMeans<T extends Point> {
 
-	ArrayList<Point> points;
-	ArrayList<Cluster> clusters;
+	private final Class<T> type;
 
-	public KMeans(ArrayList<Point> pointlist) {
-		points = new ArrayList<Point>();
-		clusters = new ArrayList<Cluster>();
+	ArrayList<T> points;
+	ArrayList<Cluster<T>> clusters;
 
+	public KMeans(Class<T> type, ArrayList<T> pointlist) {
+		points = new ArrayList<T>();
+		clusters = new ArrayList<Cluster<T>>();
 		points = pointlist;
+		this.type = type;
+
 	}
 
-	private ArrayList<Point> chooseCentroids(int k, int numberOfTags) {
+	private ArrayList<T> chooseCentroids(int k, int numberOfTags) {
 
-		ArrayList<Point> centroids = new ArrayList<Point>();
+		ArrayList<T> centroids = new ArrayList<T>();
 		Random r = new Random();
 		int from = 0;
 
 		for (int i = 0; i < k; i++) {
-
 			int randomIndex = r.nextInt(numberOfTags - from) + from;
 
 			if (!centroids.contains(points.get(randomIndex))) {
@@ -36,13 +38,14 @@ public class KMeans {
 
 	// kell k: hány klasztert akarunk, és kellenek a kezdõ centroidok (k db)
 	// végén: kell, hogy az egyes klaszterekben mely pontok vannak együtt
-	public void createClusters(int k, int numberOfTags) {
+	public void createClusters(int k, int numberOfTags)
+			throws InstantiationException, IllegalAccessException {
 
-		ArrayList<Point> initialCentroids = chooseCentroids(k, numberOfTags);
+		ArrayList<T> initialCentroids = chooseCentroids(k, numberOfTags);
 
 		// létrehozunk k üres klasztert
 		for (int i = 0; i < k; i++) {
-			clusters.add(new Cluster(new ArrayList<Point>(), initialCentroids
+			clusters.add(new Cluster<T>(new ArrayList<T>(), initialCentroids
 					.get(i)));
 		}
 
@@ -67,7 +70,8 @@ public class KMeans {
 					actualCluster = clusters.get(j).getPoints()
 							.indexOf(points.get(i));
 
-					int tempDistance = points.get(i).distance(clusters.get(j).getCentroid());
+					int tempDistance = points.get(i).distance(
+							clusters.get(j).getCentroid());
 					if (tempDistance < distance) {
 						distance = tempDistance;
 						nextCluster = j;
@@ -98,14 +102,18 @@ public class KMeans {
 					changed = false;
 				}
 			}
-
+			// TODO
 			if (clusterChanged) {
 				// miután minden pontot besoroltunk a megfelelõ klaszterbe,
 				// kiszámítjuk a klaszterek új centroidját
 				for (int i = 0; i < k; i++) {
 
-					Point newCentroid = new Point("centroid", clusters.get(i)
-							.calculateCentroid());
+					System.out.println("cluster calculate");
+
+					T newCentroid = getTypeInstance();
+					newCentroid.setName("centroid");
+					// TODO
+					newCentroid.setArtists(clusters.get(i).calculateCentroid());
 
 					clusters.get(i).setCentroid(newCentroid);
 				}
@@ -116,12 +124,13 @@ public class KMeans {
 	public void writeToFile(String filename) {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("C:\\new\\"+ filename +".txt", "UTF-8");
+			writer = new PrintWriter("C:\\new\\" + filename + ".txt", "UTF-8");
 
 			for (int i = 0; i < clusters.size(); i++) {
-				writer.println("\n\r\n\r"+(int) (i + 1) + ". klaszter: \n\r\n\r");
+				writer.println("\n\r\n\r" + (int) (i + 1)
+						+ ". klaszter: \n\r\n\r");
 
-				ArrayList<Point> resultpoints = clusters.get(i).getPoints();
+				ArrayList<T> resultpoints = clusters.get(i).getPoints();
 
 				for (int j = 0; j < resultpoints.size(); j++) {
 					writer.println(resultpoints.get(j).getName() + ", "
@@ -133,6 +142,11 @@ public class KMeans {
 			e.printStackTrace();
 		}
 
+	}
+
+	private T getTypeInstance() throws InstantiationException,
+			IllegalAccessException {
+		return type.newInstance();
 	}
 
 }

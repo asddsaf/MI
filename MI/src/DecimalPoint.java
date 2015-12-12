@@ -5,9 +5,11 @@ public class DecimalPoint extends Point{
 		super(name, artists);
 	}
 
+	
 	//L2 norma (euklideszi távolság)
 	@Override
 	public int distance(Point p1) {
+
 		int d = 0;
 		int p1Array[] = p1.getArtists();
 		int p2Array[] = this.getArtists();

@@ -2,29 +2,33 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class Cluster {
+public class Cluster<T extends Point> {
 
-	private ArrayList<Point> points;
-	private Point centroid;
+	private ArrayList<T> points;
+	private T centroid;
 	
-	public Cluster(ArrayList<Point> points, Point centroid){
+	public Cluster(ArrayList<T> points, T centroid){
 		this.points = points;
 		this.centroid = centroid;
 	}
 	
-	public void addPoint(Point point){
+	public void addPoint(T point){
 		this.points.add(point);
 	}
 	
-	public void removePoint(Point point){
+	public void removePoint(T point){
 		this.points.remove(point);
 	}
 	
-	public void setCentroid(Point centroid){
+	public void setCentroid(T centroid){
 		this.centroid = centroid;
 	}
-	
+	boolean b=true;
 	public int[] calculateCentroid() {
+			if(b){
+			System.out.println("Normal Cluster calculate");
+			b=false;
+		}
 		return null;
 	}
 	
@@ -32,11 +36,11 @@ public class Cluster {
 		return centroid;
 	}
 	
-	public ArrayList<Point> getPoints() {
+	public ArrayList<T> getPoints() {
 		return points;
 	}
 
-	public int getDistance(Cluster cluster) {
+	public int getDistance(Cluster<T> cluster) {
 		//ebben a klaszterban lévõ összes elemet összehasonlítjuk a paraméterben szereplõ klaszter összes elemével
 		//és visszaadjuk a minimális távolságot
 		int minDist = 10000;

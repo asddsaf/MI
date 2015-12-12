@@ -6,12 +6,12 @@ import java.util.Collections;
 
 public class Hierarchical {
 
-	ArrayList<Point> points;
-	ArrayList<Cluster> clusters;
+	ArrayList<DecimalPoint> points;
+	ArrayList<Cluster<DecimalPoint>> clusters;
 	
-	public Hierarchical(ArrayList<Point> pointlist) {
-		points = new ArrayList<Point>();
-		clusters = new ArrayList<Cluster>();
+	public Hierarchical(ArrayList<DecimalPoint> pointlist) {
+		points = new ArrayList<DecimalPoint>();
+		clusters = new ArrayList<Cluster<DecimalPoint>>();
 
 		points = pointlist;
 		Collections.sort(points, new Point());
@@ -21,9 +21,9 @@ public class Hierarchical {
 	public void createClusters(int k) {
 		//minden elemnek létrehozunk egy saját klasztert
 		for (int i = 0; i<points.size(); i++) {
-			ArrayList<Point> initial = new ArrayList<Point>();
+			ArrayList<DecimalPoint> initial = new ArrayList<DecimalPoint>();
 			initial.add(points.get(i));
-			clusters.add(new Cluster(initial , null));
+			clusters.add(new Cluster<DecimalPoint>(initial , null));
 		}
 		int clusterCount = clusters.size();
 		while (clusterCount > k) {
@@ -42,10 +42,10 @@ public class Hierarchical {
 				}
 			}
 			//megtaláltuk a két legközelebbi klasztert, össze kell vonni õket
-			ArrayList<Point> newpoints = clusters.get(c1).getPoints();
+			ArrayList<DecimalPoint> newpoints = clusters.get(c1).getPoints();
 			newpoints.addAll(clusters.get(c2).getPoints());
 			Collections.sort(newpoints, new Point());
-			Cluster cij = new Cluster(newpoints, null);
+			Cluster<DecimalPoint> cij = new Cluster<DecimalPoint>(newpoints, null);
 			if (c1 < c2) {
 				clusters.remove(c2);
 				clusters.remove(c1);
@@ -57,7 +57,7 @@ public class Hierarchical {
 				clusters.add(c2, cij);
 			}
 			clusterCount = clusterCount - 1;
-			System.out.println("aktualis clustercount:" + clusterCount);
+			//System.out.println("aktualis clustercount:" + clusterCount);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class Hierarchical {
 			for (int i = 0; i < clusters.size(); i++) {
 				writer.println("\n\r\n\r"+(int) (i + 1) + ". klaszter: \n\r\n\r");
 
-				ArrayList<Point> resultpoints = clusters.get(i).getPoints();
+				ArrayList<DecimalPoint> resultpoints = clusters.get(i).getPoints();
 
 				for (int j = 0; j < resultpoints.size(); j++) {
 					writer.println(resultpoints.get(j).getName() + ", "

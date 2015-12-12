@@ -1,9 +1,7 @@
 import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,14 +20,14 @@ public class DataProcessor {
 	//egyedi tagek száma
 	private int tagCount;
 	// létrehozott pontok listája - bináris alakban
-	private static ArrayList<Point> binaryPoints;
+	private static ArrayList<BinaryPoint> binaryPoints;
 	//létrehozott pontok listája - count alapján, decimális alakban
-	private static ArrayList<Point> decimalPoints;
+	private static ArrayList<DecimalPoint> decimalPoints;
 
 	public DataProcessor() {
 		this.tags = new ArrayList<String>();
-		this.binaryPoints = new ArrayList<Point>();
-		this.decimalPoints = new ArrayList<Point>();
+		DataProcessor.binaryPoints = new ArrayList<BinaryPoint>();
+		DataProcessor.decimalPoints = new ArrayList<DecimalPoint>();
 	}
 
 	// xml beolvasása ás a paramáterben megadott tag-ek visszaadása
@@ -145,7 +143,7 @@ public class DataProcessor {
 				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt",
 						"UTF-8");
 
-				for (Point p : decimalPoints) {
+				for (DecimalPoint p : decimalPoints) {
 					writer.println(p.getName()
 							+ "\n****************************");
 					for (int k : p.getArtists())
@@ -172,11 +170,11 @@ public class DataProcessor {
 		
 	}
 
-	public ArrayList<Point> getBinaryPoints(){
+	public ArrayList<BinaryPoint> getBinaryPoints(){
 		return binaryPoints;
 	}
 	
-	public ArrayList<Point> getDecimalPoints(){
+	public ArrayList<DecimalPoint> getDecimalPoints(){
 		return decimalPoints;
 	}
 	

@@ -17,6 +17,14 @@ public class Point implements Comparator<Point>{
 		this.name = name;
 		this.artists = artists;
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setArtists(int[] artists) {
+		this.artists = artists;
+	}
 
 	public String getName() {
 		return name;
