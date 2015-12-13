@@ -87,9 +87,6 @@ public class KMeans<T extends Point> {
 				// i. pont kivétele az aktuális klaszterébõl, ha az más, mint a
 				// most megtalált
 				if (actualCluster != -1 && nextCluster != actualCluster) {
-
-					System.out.println(i + ". pontot soroljuk át " + actualCluster +". klaszterbol "+nextCluster+". klaszterbe");
-					System.out.println(points.get(i).getName());
 					
 					// i. pontot besoroljuk a megtalált klaszterbe
 					clusters.get(nextCluster).addPoint(points.get(i));
