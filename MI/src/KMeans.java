@@ -18,8 +18,6 @@ public class KMeans<T extends Point> {
 
 	}
 	
-
-
 	private ArrayList<T> chooseCentroids(int k, int numberOfTags) {
 
 		ArrayList<T> centroids = new ArrayList<T>();
@@ -108,27 +106,11 @@ public class KMeans<T extends Point> {
 					clusterChanged = true;
 				}
 			}
-			
-			//debug célok: kiírni hányadik klaszterban vannak a pontok
-//			for (int i = 0; i<points.size(); i++ ) {
-//				int actclust = -1;
-//				int j = 0;
-//				int found = -1;
-//				while (found == -1 && j < k) {
-//					found = clusters.get(j).getPoints()
-//							.indexOf(points.get(i));
-//					actclust = j;
-//					j++;
-//				}
-//				System.out.println(i + ". pont : " + actclust);
-//			}
-			
+						
 			if (clusterChanged) {
 				// miután minden pontot besoroltunk a megfelelõ klaszterbe,
 				// kiszámítjuk a klaszterek új centroidját
 				for (int i = 0; i < k; i++) {
-
-					System.out.println("cluster calculate");
 
 					T newCentroid = getTypeInstance();
 					newCentroid.setName("centroid");
