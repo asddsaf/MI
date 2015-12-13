@@ -10,13 +10,15 @@ public class KMeans<T extends Point> {
 	ArrayList<T> points;
 	ArrayList<Cluster<T>> clusters;
 
-	public KMeans(Class<T> type, ArrayList<T> pointlist) {
+	public KMeans(Class<T> type, ArrayList<T> pointlist) throws InstantiationException, IllegalAccessException {
 		points = new ArrayList<T>();
 		clusters = new ArrayList<Cluster<T>>();
 		points = pointlist;
 		this.type = type;
 
 	}
+	
+
 
 	private ArrayList<T> chooseCentroids(int k, int numberOfTags) {
 
@@ -45,7 +47,7 @@ public class KMeans<T extends Point> {
 
 		// létrehozunk k üres klasztert
 		for (int i = 0; i < k; i++) {
-			clusters.add(new Cluster<T>(new ArrayList<T>(), initialCentroids
+			clusters.add(new Cluster<T>(type,new ArrayList<T>(), initialCentroids
 					.get(i)));
 		}
 
@@ -104,21 +106,23 @@ public class KMeans<T extends Point> {
 				}
 			}
 			// TODO
-			if (clusterChanged) {
-				// miután minden pontot besoroltunk a megfelelõ klaszterbe,
-				// kiszámítjuk a klaszterek új centroidját
-				for (int i = 0; i < k; i++) {
+			
+				if (clusterChanged) {
+					// miután minden pontot besoroltunk a megfelelõ klaszterbe,
+					// kiszámítjuk a klaszterek új centroidját
+					for (int i = 0; i < k; i++) {
 
-					System.out.println("cluster calculate");
+						//System.out.println("cluster calculate");
 
-					T newCentroid = getTypeInstance();
-					newCentroid.setName("centroid");
-					// TODO
-					newCentroid.setArtists(clusters.get(i).calculateCentroid());
+						T newCentroid = getTypeInstance();
+						newCentroid.setName("centroid");
+						// TODO
+						newCentroid.setArtists(clusters.get(i).calculateCentroid());
 
-					clusters.get(i).setCentroid(newCentroid);
+						clusters.get(i).setCentroid(newCentroid);
+					}
 				}
-			}
+
 		}
 	}
 

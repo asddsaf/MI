@@ -6,6 +6,10 @@ public class DecimalPoint extends Point{
 	}
 
 	
+	public DecimalPoint() {
+	}
+
+	
 	//L2 norma (euklideszi távolság)
 	@Override
 	public int distance(Point p1) {
