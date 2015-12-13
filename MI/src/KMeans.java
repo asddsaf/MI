@@ -58,10 +58,11 @@ public class KMeans<T extends Point> {
 
 		while (changed) {
 
+			clusterChanged = false;
 			for (int i = 0; i < points.size(); i++) { // végigmegyünk az összes
 														// ponton
 
-				int distance = 150; // ez béna, de egyelõre megteszi
+				int distance = 15000; // ez béna, de egyelõre megteszi
 				int nextCluster = 0;
 				int actualCluster = 0;
 
@@ -80,15 +81,18 @@ public class KMeans<T extends Point> {
 					}
 				}
 
-				clusterChanged = false;
 				// i. pont kivétele az aktuális klaszterébõl, ha az más, mint a
 				// most megtalált
 				if (actualCluster != -1 && nextCluster != actualCluster) {
 
-					clusters.get(actualCluster).removePoint(points.get(i));
-
+					//System.out.println(i + ". pontot soroljuk át " + actualCluster +". klaszterbol "+nextCluster+". klaszterbe");
+					//System.out.println(points.get(i).getName());
+					
 					// i. pontot besoroljuk a megtalált klaszterbe
 					clusters.get(nextCluster).addPoint(points.get(i));
+					
+					//i. pontot kitöröljük az elõzõ klaszterbõl
+					clusters.get(actualCluster).removePoint(points.get(i));
 
 					// jelezzük, hogy történt klaszterváltás
 					clusterChanged = true;
@@ -98,31 +102,39 @@ public class KMeans<T extends Point> {
 					clusters.get(nextCluster).addPoint(points.get(i));
 					clusterChanged = true;
 				}
+			}
+			
+			
+			for (int i = 0; i<points.size(); i++ ) {
+				int actclust = -1;
+				int j = 0;
+				while (actclust == -1 && j < k) {
+					actclust = clusters.get(j).getPoints()
+							.indexOf(points.get(i));
+					j++;
+				}
+				System.out.println(i + ". pont : " + actclust);
+			}
+			
+			if (clusterChanged) {
+				// miután minden pontot besoroltunk a megfelelõ klaszterbe,
+				// kiszámítjuk a klaszterek új centroidját
+				for (int i = 0; i < k; i++) {
 
-				// ha nem történt átsorolás (egy pont másik klaszterbe tevése),
-				// akkor megáll az algoritmus
-				if (!clusterChanged) {
-					changed = false;
+					System.out.println("cluster calculate");
+
+					T newCentroid = getTypeInstance();
+					newCentroid.setName("centroid");
+					newCentroid.setArtists(clusters.get(i).calculateCentroid());
+
+					clusters.get(i).setCentroid(newCentroid);
 				}
 			}
-			// TODO
-			
-				if (clusterChanged) {
-					// miután minden pontot besoroltunk a megfelelõ klaszterbe,
-					// kiszámítjuk a klaszterek új centroidját
-					for (int i = 0; i < k; i++) {
-
-						//System.out.println("cluster calculate");
-
-						T newCentroid = getTypeInstance();
-						newCentroid.setName("centroid");
-						// TODO
-						newCentroid.setArtists(clusters.get(i).calculateCentroid());
-
-						clusters.get(i).setCentroid(newCentroid);
-					}
-				}
-
+			else {
+				// ha nem történt átsorolás (egy pont másik klaszterbe tevése),
+				// akkor megáll az algoritmus
+				changed = false;
+			}
 		}
 	}
 
