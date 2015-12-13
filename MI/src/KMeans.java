@@ -64,14 +64,19 @@ public class KMeans<T extends Point> {
 
 				int distance = 15000; // ez béna, de egyelõre megteszi
 				int nextCluster = 0;
-				int actualCluster = 0;
+				int actualCluster = -1;
+				int foundActualCluster = 0;
 
 				for (int j = 0; j < k; j++) { // és megkeressük, melyik
 												// klaszterhez van közelebb
 
 					// eltároljuk, hogy melyik klaszterben van most a pont
-					actualCluster = clusters.get(j).getPoints()
+					foundActualCluster = clusters.get(j).getPoints()
 							.indexOf(points.get(i));
+					
+					if (foundActualCluster != -1) {
+						actualCluster = j;
+					}
 
 					int tempDistance = points.get(i).distance(
 							clusters.get(j).getCentroid());
@@ -85,8 +90,8 @@ public class KMeans<T extends Point> {
 				// most megtalált
 				if (actualCluster != -1 && nextCluster != actualCluster) {
 
-					//System.out.println(i + ". pontot soroljuk át " + actualCluster +". klaszterbol "+nextCluster+". klaszterbe");
-					//System.out.println(points.get(i).getName());
+					System.out.println(i + ". pontot soroljuk át " + actualCluster +". klaszterbol "+nextCluster+". klaszterbe");
+					System.out.println(points.get(i).getName());
 					
 					// i. pontot besoroljuk a megtalált klaszterbe
 					clusters.get(nextCluster).addPoint(points.get(i));
@@ -104,17 +109,19 @@ public class KMeans<T extends Point> {
 				}
 			}
 			
-			
-			for (int i = 0; i<points.size(); i++ ) {
-				int actclust = -1;
-				int j = 0;
-				while (actclust == -1 && j < k) {
-					actclust = clusters.get(j).getPoints()
-							.indexOf(points.get(i));
-					j++;
-				}
-				System.out.println(i + ". pont : " + actclust);
-			}
+			//debug célok: kiírni hányadik klaszterban vannak a pontok
+//			for (int i = 0; i<points.size(); i++ ) {
+//				int actclust = -1;
+//				int j = 0;
+//				int found = -1;
+//				while (found == -1 && j < k) {
+//					found = clusters.get(j).getPoints()
+//							.indexOf(points.get(i));
+//					actclust = j;
+//					j++;
+//				}
+//				System.out.println(i + ". pont : " + actclust);
+//			}
 			
 			if (clusterChanged) {
 				// miután minden pontot besoroltunk a megfelelõ klaszterbe,
