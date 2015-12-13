@@ -18,10 +18,10 @@ public class Main {
 		DataProcessor dp = new DataProcessor();
 		dp.process();
 		
-//		System.out.println("K-means clustering with binary vectors...");
-//		KMeans kmeans = new KMeans(BinaryPoint.class, dp.getBinaryPoints());
-//		kmeans.createClusters(K, dp.getTagCount());
-//		kmeans.writeToFile("kmeans_binary");
+		System.out.println("K-means clustering with binary vectors...");
+		KMeans kmeans = new KMeans(BinaryPoint.class, dp.getBinaryPoints());
+		kmeans.createClusters(K, dp.getTagCount());
+		kmeans.writeToFile("kmeans_binary");
 //		
 //		System.out.println("K-means clustering with tagCount vectors...");
 //		kmeans = new KMeans(DecimalPoint.class, dp.getDecimalPoints());

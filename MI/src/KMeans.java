@@ -94,6 +94,7 @@ public class KMeans<T extends Point> {
 					// i. pontot besoroljuk a megtalált klaszterbe, ha éppen
 					// nincs egy klaszterben sem (elsõ iterációnál fordul elõ)
 					clusters.get(nextCluster).addPoint(points.get(i));
+					clusterChanged = true;
 				}
 
 				// ha nem történt átsorolás (egy pont másik klaszterbe tevése),

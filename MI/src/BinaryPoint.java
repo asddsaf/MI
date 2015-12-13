@@ -5,6 +5,8 @@ public class BinaryPoint extends Point {
 		super(name, artists);
 	}
 	
+	public BinaryPoint() {}
+	
 	//Hamming távolság 2 pont között
 	@Override
 	public int distance(Point p1) {
