@@ -72,9 +72,10 @@ public class Hierarchical {
 				ArrayList<DecimalPoint> resultpoints = clusters.get(i)
 						.getPoints();
 
+				Collections.sort(resultpoints, new DecimalPoint());
+				
 				for (int j = 0; j < resultpoints.size(); j++) {
-					writer.println(resultpoints.get(j).getName() + ", "
-							+ Arrays.toString(resultpoints.get(j).getArtists()));
+					writer.println(resultpoints.get(j).getName());
 				}
 			}
 			writer.close();

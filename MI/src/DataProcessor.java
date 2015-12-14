@@ -140,19 +140,6 @@ public class DataProcessor {
 					tags.remove(tags.indexOf(tagName));
 				}
 
-				PrintWriter writer = new PrintWriter("C:\\new\\debug.txt",
-						"UTF-8");
-
-				for (DecimalPoint p : decimalPoints) {
-					writer.println(p.getName()
-							+ "\n****************************");
-					for (int k : p.getArtists())
-						writer.println(k);
-				}
-
-				writer.close();
-				// System.out.println("\n*****************************************************");
-
 			}
 
 		} catch (Exception e) {

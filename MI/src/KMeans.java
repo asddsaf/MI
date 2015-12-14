@@ -1,6 +1,7 @@
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class KMeans<T extends Point> {
@@ -134,10 +135,11 @@ public class KMeans<T extends Point> {
 						+ ". klaszter: \n\r\n\r");
 
 				ArrayList<T> resultpoints = clusters.get(i).getPoints();
+				
+				Collections.sort(resultpoints, new Point());
 
 				for (int j = 0; j < resultpoints.size(); j++) {
-					writer.println(resultpoints.get(j).getName() + ", "
-							+ Arrays.toString(resultpoints.get(j).getArtists()));
+					writer.println(resultpoints.get(j).getName());
 				}
 			}
 			writer.close();
