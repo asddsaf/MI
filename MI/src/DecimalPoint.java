@@ -19,7 +19,6 @@ public class DecimalPoint extends Point{
 		int p2Array[] = this.getArtists();
 		
 		for (int i = 0; i<p1Array.length; i++) {
-			//d += Math.pow((p1Array[i] - p2Array[i]), 2);
 			d+= (Math.abs(p1Array[i] - p2Array[i]) * Math.abs(p1Array[i] - p2Array[i]));
 		}
 		

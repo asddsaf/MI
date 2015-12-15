@@ -80,7 +80,7 @@ public class Main {
 		 for (int i = 0; i<ic3.size(); i++) {
 			 initialCentroids3d.add(dp.getDecimalPoints().get(ic3.get(i)));
 		 }
-		 kmeans.createClusters(15, dp.getTagCount(), initialCentroids3d);
+		 kmeans.createClusters(25, dp.getTagCount(), initialCentroids3d);
 		 kmeans.writeToFile("kmeans_tagcount_25_L2");
 		 elapsedTime = System.nanoTime() - startTime;
 		 System.out.println("Execution time: " + elapsedTime / 1000000
@@ -88,35 +88,35 @@ public class Main {
 		 
 		 
 	
-//		//Hierarchikus, 20 klaszter, L2 norma
-//		 System.out.println("Hierarchical clustering with tagCount vectors, 20 clusters, L2 norm...");
-//		 startTime = System.nanoTime();
-//		 Hierarchical hierarchical = new Hierarchical(dp.getDecimalPoints());
-//		 hierarchical.createClusters(20);
-//		 hierarchical.writeToFile("hierarchical_tagcount_20_L2");
-//			elapsedTime = System.nanoTime() - startTime;
-//			System.out.println("Execution time: " + elapsedTime / 1000000
-//					+ " milliseconds");
-//				
-//		//Hierarchikus, 25 klaszter, L2 norma
-//		 System.out.println("Hierarchical clustering with tagCount vectors, 25 clusters, L2 norm...");
-//		 startTime = System.nanoTime();
-//		 hierarchical = new Hierarchical(dp.getDecimalPoints());
-//		 hierarchical.createClusters(25);
-//		 hierarchical.writeToFile("hierarchical_tagcount_25_L2");
-//			elapsedTime = System.nanoTime() - startTime;
-//			System.out.println("Execution time: " + elapsedTime / 1000000
-//					+ " milliseconds");
-//			
-//		//Hierarchikus, 30 klaszter, L2 norma
-//		 System.out.println("Hierarchical clustering with tagCount vectors, 30 clusters, L2 norm...");
-//		 startTime = System.nanoTime();
-//		 hierarchical = new Hierarchical(dp.getDecimalPoints());
-//		 hierarchical.createClusters(30);
-//		 hierarchical.writeToFile("hierarchical_tagcount_30_L2");
-//			elapsedTime = System.nanoTime() - startTime;
-//			System.out.println("Execution time: " + elapsedTime / 1000000
-//					+ " milliseconds");
+		//Hierarchikus, 20 klaszter, L2 norma
+		 System.out.println("Hierarchical clustering with tagCount vectors, 20 clusters, L2 norm...");
+		 startTime = System.nanoTime();
+		 Hierarchical hierarchical = new Hierarchical(dp.getDecimalPoints());
+		 hierarchical.createClusters(20);
+		 hierarchical.writeToFile("hierarchical_tagcount_20_L2");
+			elapsedTime = System.nanoTime() - startTime;
+			System.out.println("Execution time: " + elapsedTime / 1000000
+					+ " milliseconds");
+				
+		//Hierarchikus, 25 klaszter, L2 norma
+		 System.out.println("Hierarchical clustering with tagCount vectors, 25 clusters, L2 norm...");
+		 startTime = System.nanoTime();
+		 hierarchical = new Hierarchical(dp.getDecimalPoints());
+		 hierarchical.createClusters(25);
+		 hierarchical.writeToFile("hierarchical_tagcount_25_L2");
+			elapsedTime = System.nanoTime() - startTime;
+			System.out.println("Execution time: " + elapsedTime / 1000000
+					+ " milliseconds");
+			
+		//Hierarchikus, 30 klaszter, L2 norma
+		 System.out.println("Hierarchical clustering with tagCount vectors, 30 clusters, L2 norm...");
+		 startTime = System.nanoTime();
+		 hierarchical = new Hierarchical(dp.getDecimalPoints());
+		 hierarchical.createClusters(30);
+		 hierarchical.writeToFile("hierarchical_tagcount_30_L2");
+			elapsedTime = System.nanoTime() - startTime;
+			System.out.println("Execution time: " + elapsedTime / 1000000
+					+ " milliseconds");
 
 		System.out.println("Done!");
 	}

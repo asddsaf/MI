@@ -62,7 +62,7 @@ public class KMeans<T extends Point> {
 			for (int i = 0; i < points.size(); i++) { // végigmegyünk az összes
 														// ponton
 
-				int distance = 150000; // ez béna, de egyelõre megteszi
+				int distance = 15000000; // ez béna, de egyelõre megteszi
 				int nextCluster = 0;
 				int actualCluster = -1;
 				int foundActualCluster = 0;
