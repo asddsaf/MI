@@ -34,7 +34,7 @@ public class Hierarchical {
 
 		while (clusterCount > k) {
 
-			int minDistance = 10000;
+			int minDistance = 1000000;
 			c1 = clusters.get(0); // e két klaszter között a legkisebb a
 									// távolság, ezeket kell majd összevonni
 			c2 = null;

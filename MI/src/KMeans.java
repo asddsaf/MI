@@ -19,17 +19,18 @@ public class KMeans<T extends Point> {
 
 	}
 	
-	private ArrayList<T> chooseCentroids(int k, int numberOfTags) {
+	//visszaadja azon pontok indexét, amik centroidok lesznek
+	public ArrayList<Integer> chooseCentroids(int k, int numberOfTags) {
 
-		ArrayList<T> centroids = new ArrayList<T>();
+		ArrayList<Integer> centroids = new ArrayList<Integer>();
 		Random r = new Random();
 		int from = 0;
 
 		for (int i = 0; i < k; i++) {
 			int randomIndex = r.nextInt(numberOfTags - from) + from;
 
-			if (!centroids.contains(points.get(randomIndex))) {
-				centroids.add(points.get(randomIndex));
+			if (!centroids.contains(randomIndex)) {
+				centroids.add(randomIndex);
 			} else
 				i--;
 		}
@@ -39,10 +40,10 @@ public class KMeans<T extends Point> {
 
 	// kell k: hány klasztert akarunk, és kellenek a kezdõ centroidok (k db)
 	// végén: kell, hogy az egyes klaszterekben mely pontok vannak együtt
-	public void createClusters(int k, int numberOfTags)
+	public void createClusters(int k, int numberOfTags, ArrayList<T> initialCentroids)
 			throws InstantiationException, IllegalAccessException {
 
-		ArrayList<T> initialCentroids = chooseCentroids(k, numberOfTags);
+		//ArrayList<T> initialCentroids = chooseCentroids(k, numberOfTags);
 
 		// létrehozunk k üres klasztert
 		for (int i = 0; i < k; i++) {
