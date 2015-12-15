@@ -34,7 +34,7 @@ public class DataProcessor {
 	private NodeList fetchFromXml(String tagName) {
 
 		try {
-			File fXmlFile = new File("C:\\new\\artistTags.xml");
+			File fXmlFile = new File("artistTags.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder;
@@ -81,7 +81,7 @@ public class DataProcessor {
 	private void createPoints() {
 
 		try {
-			File fXmlFile = new File("C:\\new\\artistTags.xml");
+			File fXmlFile = new File("artistTags.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder;

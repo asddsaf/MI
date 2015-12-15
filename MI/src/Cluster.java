@@ -54,8 +54,6 @@ public class Cluster<T extends Point> {
 				// ha több mint a felénél az adott bit 1, akkor 1 a result
 				// vectorban is (majority)
 				// DE: > vagy >= nem mindegy?! ha pont fele-fele 1 és 0, akkor
-				// melyik legyen?
-				// jzk-be ilyen is olyan is
 				if (voteVector[j] > points.size() / 2) {
 					resultVector[j] = 1;
 				}

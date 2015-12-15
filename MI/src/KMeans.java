@@ -61,7 +61,7 @@ public class KMeans<T extends Point> {
 			for (int i = 0; i < points.size(); i++) { // végigmegyünk az összes
 														// ponton
 
-				int distance = 15000; // ez béna, de egyelõre megteszi
+				int distance = 150000; // ez béna, de egyelõre megteszi
 				int nextCluster = 0;
 				int actualCluster = -1;
 				int foundActualCluster = 0;
@@ -128,7 +128,7 @@ public class KMeans<T extends Point> {
 	public void writeToFile(String filename) {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("C:\\new\\" + filename + ".txt", "UTF-8");
+			writer = new PrintWriter(filename + ".txt", "UTF-8");
 
 			for (int i = 0; i < clusters.size(); i++) {
 				writer.println("\n\r\n\r" + (int) (i + 1)

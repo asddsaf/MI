@@ -63,7 +63,7 @@ public class Hierarchical {
 	public void writeToFile(String filename) {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("C:\\new\\" + filename + ".txt", "UTF-8");
+			writer = new PrintWriter(filename + ".txt", "UTF-8");
 
 			for (int i = 0; i < clusters.size(); i++) {
 				writer.println("\n\r\n\r" + (int) (i + 1)
